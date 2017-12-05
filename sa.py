@@ -1,6 +1,7 @@
 import math
 from random import uniform
 
+
 class Annealer:
     def __init__(self,
                  sat,
@@ -18,12 +19,16 @@ class Annealer:
         self.maxcalls = maxcalls
         self.maxpert = maxpert
 
+    ''' Acceptance probability function. As the temperature falls, it should
+        tend to zero. (Except when the proposed solution's cost is lower than
+        the current solution's)'''
     def acceptance_probability(self, old_cost, new_cost, temperature):
         if new_cost < old_cost:
             return 1.0
         else:
             return math.exp(-(new_cost - old_cost) / temperature)
 
+    ''' Runs the annealer '''
     def run(self):
         solutions = []
         counter = 0

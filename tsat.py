@@ -1,6 +1,7 @@
 from random import randint
 from copy import deepcopy
 
+
 class ThreeSAT:
     def __init__(self, fname):
         self.num_vars = 0
@@ -40,7 +41,8 @@ class ThreeSAT:
             solution[i] = val
         return solution
 
-    ''' Evaluates a given solution; returns a percentage of True clauses '''
+    ''' Evaluates a given solution; returns num_clauses - passes. This way, as
+        the number of true clauses increases, the evaluation tends to zero '''
     def eval(self, solution):
         passes = 0
         for clause in self.clauses:
@@ -61,7 +63,8 @@ class ThreeSAT:
                 continue
         return self.num_clauses - passes
 
-    ''' Perturbates a given solution. ''' # Is it right?
+    ''' Changes a single value of a solution to its negation in order to disturb
+        the solution '''
     def perturbation(self, solution):
         new_sol = deepcopy(solution)
         altered = randint(1, self.num_vars)
