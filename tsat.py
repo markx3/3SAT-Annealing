@@ -50,15 +50,15 @@ class ThreeSAT:
             b = clause[1]
             c = clause[2]
 
-            a_sol = solution.get(a)
-            b_sol = solution.get(b)
-            c_sol = solution.get(c)
+            sol_a = solution.get(a)
+            sol_b = solution.get(b)
+            sol_c = solution.get(c)
 
-            if a < 0: a_sol = not a_sol
-            if b < 0: b_sol = not b_sol
-            if c < 0: c_sol = not c_sol
+            if a < 0: sol_a = not sol_a
+            if b < 0: sol_b = not sol_b
+            if c < 0: sol_c = not sol_c
 
-            if a_sol or b_sol or c_sol:
+            if sol_a or sol_b or sol_c:
                 passes += 1
                 continue
         return self.num_clauses - passes
