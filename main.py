@@ -1,10 +1,11 @@
 from sa import Annealer
 from tsat import ThreeSAT
 from rs import RandomSearch
+import numpy as np
 import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
-    fname = 'uf20-01.cnf'
+    fname = 'uf100-01.cnf'
     sat = ThreeSAT(fname)
     print(fname)
     print(str(sat.num_clauses) + ' clauses')
@@ -12,11 +13,15 @@ if __name__ == '__main__':
     rs = RandomSearch(sat)
     print("Running annealer...")
     print(sa.run()[0])
-    plt.ylabel("Custo")
+    plt.ylabel("Cláusulas satisfeitas")
     plt.xlabel("Temperatura")
-    plt.plot(sa.temp_list, sa.cost_list)
+    plt.plot(sa.temp_list[:], sa.cost_list[:])
     plt.xlim(plt.xlim()[::-1])             # Reverses x axis
-
     plt.show()
     print("\nRunning random search...")
     print(rs.run())
+    plt.ylabel("Custo")
+    plt.xlabel("Iteração")
+    plt.plot(np.arange(0, 500001, 1), rs.cost_list)
+    plt.xlim(plt.xlim()[::-1])             # Reverses x axis
+    plt.show()

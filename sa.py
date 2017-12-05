@@ -38,7 +38,7 @@ class Annealer:
         sol_out_fo = self.sat.eval(sol_out)
         temp = self.temp
         self.temp_list.append(temp)
-        self.cost_list.append(sol_out_fo)
+        self.cost_list.append(self.sat.num_clauses - sol_out_fo)
         while temp > self.tempmin and counter < self.maxcalls:
             i = 1
             success = 0
@@ -54,7 +54,7 @@ class Annealer:
                 i += 1
             temp = temp*self.alpha
             self.temp_list.append(temp)
-            self.cost_list.append(sol_out_fo)
+            self.cost_list.append(self.sat.num_clauses - sol_out_fo)
             counter += 1
             print(sol_out_fo)
             if sol_out_fo == 0:

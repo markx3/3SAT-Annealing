@@ -3,6 +3,7 @@ class RandomSearch:
         self.sat = sat
         self.clauses = self.sat.clauses
         self.maxcalls = maxcalls
+        self.cost_list = []
 
     def run(self):
         counter = 0
@@ -12,8 +13,9 @@ class RandomSearch:
             sol = self.sat.initial_solution()
             sol_fo = self.sat.eval(sol)
             counter += 1
-            if sol_fo > sol_out_fo:
+            if sol_fo < sol_out_fo:
                 sol_out = sol
                 sol_out_fo = sol_fo
+            self.cost_list.append(sol_out_fo)
         print(self.sat.eval(sol_out))
         return(sol_out)
