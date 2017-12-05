@@ -63,7 +63,7 @@ class ThreeSAT:
             if a_sol or b_sol or c_sol:
                 passes += 1
                 continue
-        return passes
+        return self.num_clauses - passes
 
     ''' Perturbates a given solution. ''' # Is it right?
     def perturbation(self, solution):
@@ -79,11 +79,11 @@ class ThreeSAT:
 class SimulatedAnnealing:
     def __init__(self,
                  sat,
-                 temp=25000,
+                 temp=95,
                  maxcalls=500000,
-                 tempmin=1,
-                 alpha=0.0025,
-                 maxpert=10):
+                 tempmin=0.01,
+                 alpha=0.05,
+                 maxpert=100):
         self.sat = sat
         self.clauses = self.sat.clauses
         self.solution = sat.init_solution
@@ -97,7 +97,7 @@ class SimulatedAnnealing:
         if new_cost < old_cost:
             return 1.0
         else:
-            return math.exp((old_cost - new_cost) / temperature)
+            return math.exp(-(new_cost - old_cost) / temperature)
 
     def run(self):
         solutions = []
@@ -115,20 +115,20 @@ class SimulatedAnnealing:
                 sol_fo = self.sat.eval(sol)
                 delta = sol_out_fo - sol_fo
                 ap = self.acceptance_probability(sol_out_fo, sol_fo, temp)
-            #    print(ap)
-                if ap > uniform(0, 1) or delta <= 0:
+            #    print(str(ap) + "\n" + str(temp) + "\n\n")
+                if ap > uniform(0, 1):
                     sol_out = sol
                     sol_out_fo = sol_fo
+                    success += 1
                 i += 1
             temp = temp*self.alpha
             counter += 1
             print(sol_out_fo)
-            if sol_out_fo == self.sat.num_clauses:
+            if sol_out_fo == 0:
                 if sol_out not in solutions:
                     solutions.append(sol_out)
         print("Solutions: " + str(len(solutions)))
-        print(sol_out_fo)
-        print(counter)
+        print(str(counter) + " iterations")
         return solutions
 
 
@@ -154,14 +154,14 @@ class RandomSearch:
 
 
 if __name__ == '__main__':
-    fname = 'uf100-01.cnf'
+    fname = 'uf250-01.cnf'
     sat = ThreeSAT(fname)
     print(sat.num_clauses)
     time.sleep(3)
     sa = SimulatedAnnealing(sat)
     rs = RandomSearch(sat)
     #print(rs.run())
-    print(sa.run())
+    print(sa.run()[0])
     # sa.solution = sa.sat.initial_solution()
     # print(sa.clauses)
     # print(sa.solution)
