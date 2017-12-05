@@ -13,8 +13,8 @@ class ThreeSAT:
     ''' Reads proposition from file '''
     def proposition_read(self):
         f = open(self.fname, 'r').readlines()
-        header   = f[7:8]
-        clauses  = f[8:-3]
+        header = f[7:8]
+        clauses = f[8:-3]
 
         splt_hdr = header[0].split()
         num_vars = int(splt_hdr[2])

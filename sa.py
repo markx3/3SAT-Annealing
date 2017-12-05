@@ -18,6 +18,8 @@ class Annealer:
         self.alpha = 1-alpha
         self.maxcalls = maxcalls
         self.maxpert = maxpert
+        self.temp_list = []
+        self.cost_list = []
 
     ''' Acceptance probability function. As the temperature falls, it should
         tend to zero. (Except when the proposed solution's cost is lower than
@@ -34,9 +36,9 @@ class Annealer:
         counter = 0
         sol_out = self.sat.init_solution
         sol_out_fo = self.sat.eval(sol_out)
-        sol_aux = {}
-        sol_aux_fo = 0
         temp = self.temp
+        self.temp_list.append(temp)
+        self.cost_list.append(sol_out_fo)
         while temp > self.tempmin and counter < self.maxcalls:
             i = 1
             success = 0
@@ -51,6 +53,8 @@ class Annealer:
                     success += 1
                 i += 1
             temp = temp*self.alpha
+            self.temp_list.append(temp)
+            self.cost_list.append(sol_out_fo)
             counter += 1
             print(sol_out_fo)
             if sol_out_fo == 0:
