@@ -63,16 +63,16 @@ class ThreeSAT:
             if a_sol or b_sol or c_sol:
                 passes += 1
                 continue
-        return passes/self.num_clauses
+        return passes
 
     ''' Perturbates a given solution. ''' # Is it right?
     def perturbation(self, solution):
         new_sol = deepcopy(solution)
-        alter_num = randint(1, 4)
-        for _ in range(0, alter_num):
-            altered = randint(1, self.num_vars)
-            val = new_sol.get(altered)
-            new_sol[altered] = not val
+        #alter_num = randint(1, 4)
+        #for _ in range(0, alter_num):
+        altered = randint(1, self.num_vars)
+        val = new_sol.get(altered)
+        new_sol[altered] = not val
         return new_sol
 
 
@@ -115,19 +115,21 @@ class SimulatedAnnealing:
                 sol_fo = self.sat.eval(sol)
                 delta = sol_out_fo - sol_fo
                 ap = self.acceptance_probability(sol_out_fo, sol_fo, temp)
-                #print(ap)
-                if ap > uniform(0, 1):
+            #    print(ap)
+                if ap > uniform(0, 1) or delta <= 0:
                     sol_out = sol
                     sol_out_fo = sol_fo
                 i += 1
             temp = temp*self.alpha
             counter += 1
             print(sol_out_fo)
-            if sol_out_fo == 1:
-                break
+            if sol_out_fo == self.sat.num_clauses:
+                if sol_out not in solutions:
+                    solutions.append(sol_out)
+        print("Solutions: " + str(len(solutions)))
         print(sol_out_fo)
         print(counter)
-        return sol_out
+        return solutions
 
 
 class RandomSearch:
@@ -154,6 +156,8 @@ class RandomSearch:
 if __name__ == '__main__':
     fname = 'uf100-01.cnf'
     sat = ThreeSAT(fname)
+    print(sat.num_clauses)
+    time.sleep(3)
     sa = SimulatedAnnealing(sat)
     rs = RandomSearch(sat)
     #print(rs.run())
