@@ -16,6 +16,6 @@ class RandomSearch:
             if sol_fo < sol_out_fo:
                 sol_out = sol
                 sol_out_fo = sol_fo
-            self.cost_list.append(sol_out_fo)
+            self.cost_list.append(self.sat.num_clauses - sol_out_fo)
         print(self.sat.eval(sol_out))
         return(sol_out)
